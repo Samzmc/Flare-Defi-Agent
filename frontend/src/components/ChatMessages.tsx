@@ -28,7 +28,7 @@ export default function ChatMessages({
             <span className="text-2xl text-white font-bold">F</span>
           </div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Flare DeFi Copilot
+            Flare DeFi Agent
           </h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm max-w-md">
             Your AI assistant for interacting with Flare Network protocols.

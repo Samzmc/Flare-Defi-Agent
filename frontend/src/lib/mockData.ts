@@ -188,7 +188,7 @@ const mockPatterns: MockPattern[] = [
 const defaultResponse: ChatResponse = {
   role: "assistant",
   content:
-    "I'm the Flare DeFi Copilot! I can help you with:\n\n- **Check prices** - Get real-time crypto prices from Flare's FTSO oracle\n- **Wallet operations** - Check balances and send transactions on Coston2\n- **Random numbers** - Generate secure random numbers via Flare's protocol\n- **Search** - Look up information about Flare's ecosystem\n\nTry asking me something like \"What's the price of FLR?\" or \"Check my wallet balance\"!",
+    "I'm the Flare DeFi Agent! I can help you with:\n\n- **Check prices** - Get real-time crypto prices from Flare's FTSO oracle\n- **Wallet operations** - Check balances and send transactions on Coston2\n- **Random numbers** - Generate secure random numbers via Flare's protocol\n- **Search** - Look up information about Flare's ecosystem\n\nTry asking me something like \"What's the price of FLR?\" or \"Check my wallet balance\"!",
 };
 
 export function getMockResponse(userMessage: string): Promise<ChatResponse> {

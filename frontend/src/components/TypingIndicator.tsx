@@ -8,7 +8,7 @@ export default function TypingIndicator() {
           <div className="w-6 h-6 rounded-full bg-gradient-to-br from-flare-coral to-flare-coral-dark flex items-center justify-center">
             <span className="text-xs text-white font-bold">F</span>
           </div>
-          <span className="text-xs text-gray-400 dark:text-gray-500">Flare Copilot</span>
+          <span className="text-xs text-gray-400 dark:text-gray-500">Flare Agent</span>
         </div>
         <div className="bg-gray-100 dark:bg-dark-600 rounded-2xl rounded-bl-md px-4 py-3 inline-flex items-center gap-1.5">
           <div

@@ -6,7 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Flare DeFi Copilot",
+  title: "Flare DeFi Agent",
   description:
     "AI-powered DeFi assistant for Flare Network — built with MCP at ETH Oxford 2026",
 };

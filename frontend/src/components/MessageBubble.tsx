@@ -21,7 +21,7 @@ export default function MessageBubble({ message }: { message: Message }) {
             </div>
           )}
           <span className="text-xs text-gray-400 dark:text-gray-500">
-            {isUser ? "You" : "Flare Copilot"}
+            {isUser ? "You" : "Flare Agent"}
           </span>
         </div>
 

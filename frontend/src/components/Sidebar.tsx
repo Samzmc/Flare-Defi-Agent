@@ -45,7 +45,7 @@ export default function Sidebar({ onQuickAction, isOpen, onClose }: SidebarProps
             </div>
             <div>
               <h1 className="text-lg font-bold text-gray-900 dark:text-white">Flare DeFi</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">MCP Copilot</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">MCP Agent</p>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
   <img src="team_logo.png" alt="Nexus Flare — Cambridge Engineering" width="300" />
 </p>
 
-# Flare DeFi Copilot
+# Flare DeFi Agent
 
 **An AI-powered DeFi assistant that uses the Model Context Protocol (MCP) to give Claude autonomous access to Flare's on-chain data protocols.**
 
@@ -12,7 +12,7 @@ Built at **ETH Oxford 2026** for the Flare track.
 
 ## What It Does
 
-Flare DeFi Copilot is a conversational AI agent that can **read live blockchain data from the Flare network** and reason about it in real time. Instead of hard-coding API calls, we wrap Flare's three core data protocols as **MCP tools** that Claude can discover and invoke autonomously based on what the user asks.
+Flare DeFi Agent is a conversational AI agent that can **read live blockchain data from the Flare network** and reason about it in real time. Instead of hard-coding API calls, we wrap Flare's three core data protocols as **MCP tools** that Claude can discover and invoke autonomously based on what the user asks.
 
 **Ask it anything about Flare:**
 - *"What's the current price of FLR?"* — reads FTSO v2 price feeds on-chain
