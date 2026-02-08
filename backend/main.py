@@ -191,17 +191,15 @@ def execute_tool(name: str, args: dict) -> dict:
 
     if name == "verify_on_flare":
         try:
-            submission = fdc_oracle.submit_verification_request(args["tx_hash"])
-            proof = fdc_oracle.get_attestation_proof(submission["roundId"])
+            result = fdc_oracle.submit_verification_request(args["tx_hash"])
             return {
                 "success": True,
-                "submission": submission,
-                "proof": {
-                    "status": proof["status"],
-                    "roundId": proof["roundId"],
-                    "source": proof["source"],
-                    "proof_data": proof["proof"],
-                },
+                "verified": result.get("verified", False),
+                "tx_hash": result.get("tx_hash", ""),
+                "status": result.get("status", ""),
+                "message": result.get("message", ""),
+                "roundId": result.get("roundId", 0),
+                "details": result.get("details"),
             }
         except Exception as e:
             return {"success": False, "error": str(e)}

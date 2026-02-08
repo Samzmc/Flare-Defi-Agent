@@ -73,42 +73,59 @@ class FlareFDCOracle:
 
     def submit_verification_request(self, transaction_hash: str) -> Dict[str, Any]:
         """
-        MOCK: Simulate submitting a verification request to the FdcHub.
+        Verify a transaction by calling the Flare Verifier API directly.
 
-        In production this would:
-        1. Encode the attestation request
-        2. Submit it to the FdcHub smart contract (costs gas)
-        3. Wait ~90 seconds for the consensus round to complete
-
-        For this demo we skip all of that and return a simulated response.
+        Sends the user's transaction hash to the verifier to check if it
+        can be attested, then returns a clear verified/not-found result.
 
         Args:
             transaction_hash: The transaction hash to verify (e.g. "0xabc...")
 
         Returns:
-            dict: {
-                'status': 'submitted',
-                'tx_hash': str,
-                'roundId': int,
-                'message': str
-            }
+            dict with verification result including verified status
         """
-        print(f"[FDC] Submitting request to StateConnector...")
+        print(f"[FDC] Verifying transaction via Flare Verifier API...")
         print(f"[FDC] Tx Hash: {transaction_hash}")
 
-        # Simulate network delay
-        time.sleep(1)
+        # Call the real verifier API with the user's tx hash
+        verification = self._try_verifier_api(transaction_hash)
 
         round_id = self.DEMO_ROUND_ID
 
-        print(f"[FDC] Request entered consensus round {round_id}")
+        if verification is not None:
+            api_status = verification.get("api_status_code", 0)
+            api_response = verification.get("api_response", {})
+
+            # Status 200 means the verifier recognised and validated the tx
+            if api_status == 200 and api_response.get("status") == "VALID":
+                return {
+                    "status": "verified",
+                    "verified": True,
+                    "tx_hash": transaction_hash,
+                    "roundId": round_id,
+                    "message": "Transaction verified successfully by Flare FDC.",
+                    "details": api_response,
+                }
+            else:
+                return {
+                    "status": "not_verified",
+                    "verified": False,
+                    "tx_hash": transaction_hash,
+                    "roundId": round_id,
+                    "message": (
+                        f"Verifier responded with status code {api_status}. "
+                        f"The transaction could not be verified — it may not exist, "
+                        f"may be on a different chain, or may not have enough confirmations."
+                    ),
+                    "details": api_response,
+                }
 
         return {
-            "status": "submitted",
+            "status": "api_unavailable",
+            "verified": False,
             "tx_hash": transaction_hash,
             "roundId": round_id,
-            "message": f"Request entered consensus round {round_id}. "
-                       f"(Demo mode: submission mocked, no gas spent)",
+            "message": "Flare Verifier API is temporarily unavailable.",
         }
 
     def get_attestation_proof(self, round_id: int) -> Dict[str, Any]:
@@ -132,18 +149,7 @@ class FlareFDCOracle:
         """
         print(f"[FDC] Fetching attestation proof for round {round_id}...")
 
-        # --- Attempt 1: Real call to Flare Verifier API ---
-        proof = self._try_verifier_api()
-        if proof is not None:
-            print("[FDC] Fetched real response from Flare Verifier API.")
-            return {
-                "status": "verified",
-                "roundId": round_id,
-                "proof": proof,
-                "source": "Flare FDC Verifier API (Coston2 Testnet)",
-            }
-
-        # --- Attempt 2: Real call to DA Layer ---
+        # --- Attempt: Real call to DA Layer ---
         proof = self._try_da_layer(round_id)
         if proof is not None:
             print("[FDC] Fetched real proof from Flare DA Layer.")
@@ -163,9 +169,12 @@ class FlareFDCOracle:
             "source": "Demo fallback (APIs temporarily unavailable)",
         }
 
-    def _try_verifier_api(self) -> dict | None:
+    def _try_verifier_api(self, transaction_hash: str) -> dict | None:
         """
         Attempt a real POST to the Flare Verifier API (EVMTransaction).
+
+        Args:
+            transaction_hash: The actual transaction hash to verify.
 
         Returns the API response dict on success, or None on failure.
         """
@@ -174,10 +183,7 @@ class FlareFDCOracle:
             "attestationType": self.ATTESTATION_TYPE_EVM_TX,
             "sourceId": self.SOURCE_ID_TEST_ETH,
             "requestBody": {
-                "transactionHash": (
-                    "0x4e636c6f50b2a9539e5e5c5cd3590bd3bb25637a"
-                    "2b1e69f4282a16a0d5a04590"
-                ),
+                "transactionHash": transaction_hash,
                 "requiredConfirmations": "1",
                 "provideInput": True,
                 "listEvents": True,
@@ -191,11 +197,6 @@ class FlareFDCOracle:
                 "api_status_code": resp.status_code,
                 "api_response": data,
                 "endpoint": url,
-                "note": (
-                    "Real response from Flare Verifier API. "
-                    "Status codes 200=success, 400=validation error (expected "
-                    "for demo tx hashes), 500=server error."
-                ),
             }
         except Exception:
             return None
